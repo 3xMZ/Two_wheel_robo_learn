@@ -1,0 +1,8 @@
+prefix=/home/michael/workspace/catkin_ws/install
+
+Name: two_wheel_robo
+Description: Description of two_wheel_robo
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
