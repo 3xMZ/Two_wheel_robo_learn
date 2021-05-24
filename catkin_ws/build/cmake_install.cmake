@@ -133,6 +133,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("/home/michael/workspace/catkin_ws/build/gtest/cmake_install.cmake")
   include("/home/michael/workspace/catkin_ws/build/simple_arm/cmake_install.cmake")
   include("/home/michael/workspace/catkin_ws/build/two_wheel_robo/cmake_install.cmake")
+  include("/home/michael/workspace/catkin_ws/build/ball_chaser/cmake_install.cmake")
 
 endif()
 

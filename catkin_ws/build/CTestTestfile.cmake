@@ -7,3 +7,4 @@
 subdirs("gtest")
 subdirs("simple_arm")
 subdirs("two_wheel_robo")
+subdirs("ball_chaser")

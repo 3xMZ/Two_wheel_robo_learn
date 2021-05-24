@@ -1,2 +1,2 @@
-simple_arm:two_wheel_robo
+ball_chaser:simple_arm:two_wheel_robo
 -DCATKIN_DEVEL_PREFIX=/home/michael/workspace/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/michael/workspace/catkin_ws/install -G Unix Makefiles
