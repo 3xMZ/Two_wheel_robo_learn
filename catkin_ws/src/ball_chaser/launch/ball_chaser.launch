@@ -8,4 +8,8 @@
   <node name="process_image" type="process_image" pkg="ball_chaser" output="screen">
   </node>
 
+ <!-- The process_image node -->
+  <node name="image_converter" type="image_converter" pkg="ball_chaser" output="screen">
+  </node>
+
 </launch>

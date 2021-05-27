@@ -30,7 +30,6 @@ void drive_robot(float lin_x, float ang_z)
 // This callback function continuously executes and reads the image data
 void process_image_callback(const sensor_msgs::Image img)
 {
-
     int white_pixel = 255;
     int width_mid = img.width / 2;
     int height_mid = img.height / 2;
