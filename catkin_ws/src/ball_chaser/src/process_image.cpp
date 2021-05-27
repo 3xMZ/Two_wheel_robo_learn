@@ -1,8 +1,13 @@
-#include "ros/ros.h"
+#include <ros/ros.h>
 #include "ball_chaser/DriveToTarget.h"
-#include <sensor_msgs/Image.h>
+
 #include <string>
-#include<iostream>
+#include <iostream>
+
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
+#include <sensor_msgs/Image.h>
+#include <sensor_msgs/image_encodings.h>
 
 // Define a global client that can request services
 ros::ServiceClient client;
@@ -34,7 +39,9 @@ void process_image_callback(const sensor_msgs::Image img)
     ROS_INFO_STREAM(std::to_string(center_color));
     ROS_INFO_STREAM(std::to_string(img.width));
     ROS_INFO_STREAM(std::to_string(img.height));
-
+    ROS_INFO_STREAM(img.encoding);
+    ROS_INFO_STREAM(std::to_string(img.data[0]));
+    ros::Duration(5.0).sleep();
     if (img.data[height_mid*img.width + width_mid] != white_pixel){
         for (int i = 0; i < img.width; i++) {
             for (int j = 0; j < img.height; j++) {

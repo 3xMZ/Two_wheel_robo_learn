@@ -11,11 +11,14 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   roscpp
   std_msgs
+  sensor_msgs
+  cv_bridge
+  image_transport
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-
+find_package(OpenCV 4 REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -106,6 +109,12 @@ catkin_package(
 #  LIBRARIES ball_chaser
 #  CATKIN_DEPENDS message_generation roscpp std_msgs
 #  DEPENDS system_lib
+INCLUDE_DIRS
+CATKIN_DEPENDS roscpp
+                sensor_msgs
+                std_msgs
+                cv_bridge
+                image_transport
 )
 
 ###########
@@ -204,12 +213,15 @@ add_compile_options(-std=c++11)
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  )
 
 add_executable(drive_bot src/drive_bot.cpp)
 target_link_libraries(drive_bot ${catkin_LIBRARIES})
 add_dependencies(drive_bot simple_arm_generate_messages_cpp)
 
 add_executable(process_image src/process_image.cpp)
-target_link_libraries(process_image ${catkin_LIBRARIES})
+target_link_libraries(process_image ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS})
 add_dependencies(process_image simple_arm_generate_messages_cpp)
