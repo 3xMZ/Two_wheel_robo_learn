@@ -32,54 +32,43 @@ void process_image_callback(const sensor_msgs::Image img)
 {
     cv_bridge::CvImagePtr cv_ptr;
     cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::BGR8);
-    cv::Mat cv_image = cv_ptr -> image;
-    ROS_INFO_STREAM(std::to_string(cv_image.at<cv::Vec3b>(0,0)[0]));
-    ROS_INFO_STREAM(std::to_string(cv_image.at<cv::Vec3b>(0,0)[1]));
-    ROS_INFO_STREAM(std::to_string(cv_image.at<cv::Vec3b>(0,0)[2]));
+    cv::Mat cv_image = cv_ptr -> image;  //cv_image is BGR
 
-    int white_pixel = 255;
     int width_mid = img.width / 2;
     int height_mid = img.height / 2;
     int center_color = img.data[height_mid*img.width + width_mid];
-
+    ROS_INFO_STREAM(img.encoding); //RGB8
+    /*
     ROS_INFO_STREAM(std::to_string(center_color));
     ROS_INFO_STREAM(std::to_string(img.width));
     ROS_INFO_STREAM(std::to_string(img.height));
     ROS_INFO_STREAM(img.encoding);
     ROS_INFO_STREAM(std::to_string(img.data[0]));
     ros::Duration(5.0).sleep();
-    if (img.data[height_mid*img.width + width_mid] != white_pixel){
+    */
+    if (cv_image.at<cv::Vec3b>(height_mid, width_mid)[2] != 255){
         for (int i = 0; i < img.width; i++) {
             for (int j = 0; j < img.height; j++) {
-                int curr_ind = i + j*img.width;
-                /*if (img.data[curr_ind] > 178){
-                    ROS_INFO_STREAM(std::to_string(curr_ind));
-                    ROS_INFO_STREAM(std::to_string(img.data[curr_ind]));
-                    ros::Duration(0.1).sleep();
-                }*/
-                if (img.data[curr_ind] + 30 >= white_pixel) {
-                    ROS_INFO_STREAM(std::to_string(img.data[curr_ind]));
-                    ros::Duration(2.0).sleep();
+                int B = cv_image.at<cv::Vec3b>(j, i)[0];
+                int G = cv_image.at<cv::Vec3b>(j, i)[1];
+                int R = cv_image.at<cv::Vec3b>(j, i)[2];
 
+                if (B <= 5 && R >= 250 && G <= 5){
+                    ROS_INFO_STREAM(std::to_string(i));
                     int diff = width_mid - i;
-                    float turn = (diff*1.0)/800.0;
+                    float turn = (diff*1.0)/img.width;
 
                     drive_robot(0.10, turn);
-                    ros::Duration(2.0).sleep();
+                    ros::Duration(1.0).sleep();
                     goto end_loop;
                 }
             }
         }
-        drive_robot(0.05, .125);
+        drive_robot(0, .125);
         ros::Duration(1.0).sleep();
         end_loop:
         drive_robot(0, 0);
     }
-    ros::Duration(3.0).sleep();
-    // TODO: Loop through each pixel in the image and check if there's a bright white one
-    // Then, identify if this pixel falls in the left, mid, or right side of the image
-    // Depending on the white ball position, call the drive_bot function and pass velocities to it
-    // Request a stop when there's no white ball seen by the camera
 }
 
 int main(int argc, char** argv)

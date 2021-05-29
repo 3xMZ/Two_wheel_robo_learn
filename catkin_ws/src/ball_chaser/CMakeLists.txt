@@ -228,6 +228,3 @@ add_dependencies(process_image simple_arm_generate_messages_cpp)
 
 add_executable(image_converter src/image_converter.cpp)
 target_link_libraries(image_converter ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS})
-
-add_executable(image_overlay src/image_overlay.cpp)
-target_link_libraries(image_overlay ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS})
