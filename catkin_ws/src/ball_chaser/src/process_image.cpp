@@ -37,6 +37,7 @@ void process_image_callback(const sensor_msgs::Image img)
     int width_mid = img.width / 2;
     int height_mid = img.height / 2;
     int center_color = img.data[height_mid*img.width + width_mid];
+    int B, G, R;
     ROS_INFO_STREAM(img.encoding); //RGB8
     /*
     ROS_INFO_STREAM(std::to_string(center_color));
@@ -46,28 +47,39 @@ void process_image_callback(const sensor_msgs::Image img)
     ROS_INFO_STREAM(std::to_string(img.data[0]));
     ros::Duration(5.0).sleep();
     */
+    int min_index, max_index;
+    min_index = img.width;
+    max_index = 0;
+    bool pixel_flag = false;
     if (cv_image.at<cv::Vec3b>(height_mid, width_mid)[2] != 255){
-        for (int i = 0; i < img.width; i++) {
-            for (int j = 0; j < img.height; j++) {
-                int B = cv_image.at<cv::Vec3b>(j, i)[0];
-                int G = cv_image.at<cv::Vec3b>(j, i)[1];
-                int R = cv_image.at<cv::Vec3b>(j, i)[2];
+        for (int j = 0; j < img.height; j++) {
+            for (int i = 0; i < img.width; i++) {
+                B = cv_image.at<cv::Vec3b>(j, i)[0];
+                G = cv_image.at<cv::Vec3b>(j, i)[1];
+                R = cv_image.at<cv::Vec3b>(j, i)[2];
 
                 if (B <= 5 && R >= 250 && G <= 5){
-                    ROS_INFO_STREAM(std::to_string(i));
-                    int diff = width_mid - i;
-                    float turn = (diff*1.0)/img.width;
-
-                    drive_robot(0.10, turn);
-                    ros::Duration(1.0).sleep();
-                    goto end_loop;
+                    min_index = std::min(min_index, i);
+                    max_index = std::max(max_index, i);
+                    pixel_flag = true;
                 }
             }
         }
-        drive_robot(0, .125);
-        ros::Duration(1.0).sleep();
-        end_loop:
+
+        if (pixel_flag) {
+            float diff = (min_index + max_index) / 2.0;
+            float turn = (width_mid - diff) / width_mid * (M_PI/15);
+            ROS_INFO_STREAM("ball width center : " + std::to_string(diff));
+            ROS_INFO_STREAM("turning angle : " + std::to_string(turn));
+            drive_robot(0.10, turn);
+            ros::Duration(2.0).sleep();
+        }
+        else {
+            drive_robot(0, .125);
+            ros::Duration(1.0).sleep();
+        }
         drive_robot(0, 0);
+        ros::Duration(2.0).sleep();
     }
 }
 
