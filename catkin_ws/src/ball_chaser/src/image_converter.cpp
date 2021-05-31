@@ -45,9 +45,15 @@ public:
     }
 
     // Draw an example circle on the video stream
-    if (cv_ptr->image.rows > 60 && cv_ptr->image.cols > 60)
-      cv::circle(cv_ptr->image, cv::Point(400, 400), 10, CV_RGB(255,0,0));
-
+    if (cv_ptr->image.rows > 401 && cv_ptr->image.cols > 401){
+      int quad_1 = cv_ptr->image.rows / 4;
+      int quad_3 = cv_ptr->image.rows - quad_1;
+      int center_x = cv_ptr->image.rows / 2;
+      int center_y = cv_ptr->image.cols / 2;
+      cv::circle(cv_ptr->image, cv::Point(center_x, center_y), 10, CV_RGB(255,0,0));
+      cv::line(cv_ptr->image, cv::Point(quad_1, 0), cv::Point(quad_1, cv_ptr->image.cols), CV_RGB(255,0,0), 2);
+      cv::line(cv_ptr->image, cv::Point(quad_3, 0), cv::Point(quad_3, cv_ptr->image.cols), CV_RGB(255,0,0), 2);
+    }
     // Update GUI Window
     cv::imshow(OPENCV_WINDOW, cv_ptr->image);
     cv::waitKey(3);

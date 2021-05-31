@@ -39,14 +39,7 @@ void process_image_callback(const sensor_msgs::Image img)
     int center_color = img.data[height_mid*img.width + width_mid];
     int B, G, R;
     ROS_INFO_STREAM(img.encoding); //RGB8
-    /*
-    ROS_INFO_STREAM(std::to_string(center_color));
-    ROS_INFO_STREAM(std::to_string(img.width));
-    ROS_INFO_STREAM(std::to_string(img.height));
-    ROS_INFO_STREAM(img.encoding);
-    ROS_INFO_STREAM(std::to_string(img.data[0]));
-    ros::Duration(5.0).sleep();
-    */
+
     int min_index, max_index;
     min_index = img.width;
     max_index = 0;
@@ -62,6 +55,9 @@ void process_image_callback(const sensor_msgs::Image img)
                     min_index = std::min(min_index, i);
                     max_index = std::max(max_index, i);
                     pixel_flag = true;
+                    if (min_index <= 300 && max_index >= 500){
+                        goto stop;
+                    }
                 }
             }
         }
@@ -72,14 +68,14 @@ void process_image_callback(const sensor_msgs::Image img)
             ROS_INFO_STREAM("ball width center : " + std::to_string(diff));
             ROS_INFO_STREAM("turning angle : " + std::to_string(turn));
             drive_robot(0.10, turn);
-            ros::Duration(2.0).sleep();
+            ros::Duration(1.0).sleep();
         }
         else {
             drive_robot(0, .125);
             ros::Duration(1.0).sleep();
         }
+        stop:
         drive_robot(0, 0);
-        ros::Duration(2.0).sleep();
     }
 }
 
