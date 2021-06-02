@@ -220,11 +220,11 @@ include_directories(
 
 add_executable(drive_bot src/drive_bot.cpp)
 target_link_libraries(drive_bot ${catkin_LIBRARIES})
-add_dependencies(drive_bot simple_arm_generate_messages_cpp)
+
 
 add_executable(process_image src/process_image.cpp)
 target_link_libraries(process_image ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS})
-add_dependencies(process_image simple_arm_generate_messages_cpp)
+
 
 add_executable(image_converter src/image_converter.cpp)
 target_link_libraries(image_converter ${catkin_LIBRARIES} ${OpenCV_INCLUDE_DIRS})

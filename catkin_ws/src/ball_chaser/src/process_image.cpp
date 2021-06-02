@@ -38,7 +38,7 @@ void process_image_callback(const sensor_msgs::Image img)
     int height_mid = img.height / 2;
     int center_color = img.data[height_mid*img.width + width_mid];
     int B, G, R;
-    ROS_INFO_STREAM(img.encoding); //RGB8
+    //ROS_INFO_STREAM(img.encoding); //RGB8
 
     int min_index, max_index;
     min_index = img.width;
